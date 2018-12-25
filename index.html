@@ -2,17 +2,218 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>看世界</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Merry Xmas</title>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<style>
+		*{
+			margin: 0px;
+			padding: 0px;
+		}
+		html, body{
+			width: 100%;
+			height: 100%;
+		}
+		.wrapper{
+			position: relative;
+			width: 100%;
+			height: 100%;
+			background-color: #4ce73c;
+			background-image: url('imgs/bg.png');
+			background-repeat: repeat-x;
+			background-position: 100% 100%;
+
+		}
+		.wrapper .box{
+			position: absolute;
+			width: 300px;
+			height: 255px;
+			/*border: 1px solid black;*/
+			bottom: 50px;
+			left: 50%;
+			margin-left: -150px;
+			text-align: center;
+			z-index: 10px;
+			cursor: pointer;
+		}
+		.wrapper .box .boxTop{
+			width: 100%;
+			height: 35%;
+			background-image: url('imgs/hegai.png');
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+
+		}
+		.wrapper .box .boxBottom{
+			display: inline-block;
+			width: 90%;
+			height: 65%;
+			background-image: url('imgs/hezi.png');
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+			color: #fff;
+			
+		}
+		.wrapper .box.shake .boxTop{
+			animation: shake 0.5s 0.1s linear infinite;
+		}
+		.wrapper .box.shake{
+			animation: shake 0.5s linear infinite;
+		}
+		@keyframes shake{
+			25%{
+				transform: rotateZ(4deg);
+			}
+			75%{
+				transform: rotateZ(-2deg);
+			}
+		}
+		.wrapper .box.fly .boxTop{
+			animation: flyUp 0.4s linear forwards;
+		}
+		.wrapper .box.fly .boxBottom{
+			animation: flyDown 0.25s linear forwards;
+		}
+		@keyframes flyUp{
+			0%{
+				transform: translateY(0);
+			}
+			100%{
+				transform: translateY(-1000px) rotateZ(20deg);
+			}
+		}
+		@keyframes flyDown{
+			0%{
+				transform: translateY(0);
+			}
+			100%{
+				transform: translateY(150%);
+			}
+		}
+		.bell {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin-top: -225px;
+			margin-left: -275px;
+			width: 550px;
+			height: 450px;
+			background: url('imgs/lingdang.png') no-repeat;
+			opacity: 0;
+		}
+		.show .bell{
+			opacity: 1;
+			transition: all 0.7s ease-in;
+		}
+		.merry{
+			position: absolute;
+			left: 0px;
+			top: 25%;
+			width: 100%;
+			height: 100px;
+			text-align: center;
+		}
+		.christmas{
+			position: absolute;
+			left: 0px;
+			top: 50%;
+			width: 100%;
+			height: 100px;
+			text-align: center;
+		}
+		.wrapper span{
+			display: inline-block;
+			font-size: 70px;
+			color: #2c3e50;
+			margin: 20px;
+			text-shadow: 5px 5px 2px #ca3121;
+			opacity: 0;
+		}
+		.show span{
+			opacity: 1;
+			transition: all 0.6s ease-in;
+			animation: shake 0.5s linear infinite;
+		}
+		.show span:nth-child(even){
+			animation-duration: 0.8s;
+		}
+		.snow{
+			position: fixed;
+			top: -20%;
+			animation: drop ease-in infinite;
+		}
+		@keyframes drop{
+			0%{
+				opacity: 1;
+				transform: translate(0px, -50px);
+			}
+			100%{
+				opacity: 0;
+				transform: translate(0px, 700px);
+			}
+		}
+	</style>
 </head>
 <body>
-	<p>Hello World, I Am WEN!</p>
-	<br/>
+	<audio src="Last Christmas.mp3" loop></audio>
+	<div class="wrapper">
+		<div class="bell"></div>
+		<div class="merry">
+			<span>M</span>
+			<span>E</span>
+			<span>R</span>
+			<span>R</span>
+			<span>Y</span>
+		</div>
+		<div class="christmas">
+			<span>C</span>
+			<span>H</span>
+			<span>R</span>
+			<span>I</span>
+			<span>S</span>
+			<span>T</span>
+			<span>M</span>
+			<span>A</span>
+			<span>S</span>
+		</div>
+		<div class="box">
+			<div class="boxTop"></div>
+			<div class="boxBottom">Click Me</div>
+		</div>
+	</div>
 	<script>
-		setTimeout(function(){
-			var div = document.createElement('div');
-			document.body.appendChild(div);
-			div.innerHTML = 'Good to see you here!';
-		},3000);
+		function bindEvent(){
+			$('.boxBottom').on('click', function(){	
+				$('.box').addClass('shake');
+				$('audio')[0].play();			
+				setTimeout(function(){					
+					$('.box').removeClass('shake');
+					$('.box').addClass('fly');
+					$('.wrapper').addClass('show');
+					snowInit();
+				},1000);
+			});			
+		}
+		bindEvent();
+		function snowInit(){
+			for(var i = 0; i < 100; i ++){
+				$('.wrapper').append(createSnow());
+			}
+		}
+		function random(min, max){
+			return min + Math.floor(Math.random() * (max - min));
+		}
+		function createSnow(){
+			var p = Math.random() > 0.5 ? 1 : 2;
+			var snow = $('<div class="snow"><img src="imgs/snow' + p + '.png"></div>');
+			snow.css({
+				'left': random(0, 1400) + 'px',
+				'animationDelay': random(1, 5) + 's',
+				'animationDuration': random(4, 10) + 's'
+			});
+			return snow;
+		}
 	</script>
 </body>
 </html>
